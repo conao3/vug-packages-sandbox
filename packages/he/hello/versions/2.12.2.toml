@@ -9,7 +9,6 @@ kind = "autotools"
 configure-flags = [
   "--disable-nls",
   "--disable-dependency-tracking",
-  "--enable-silent-rules",
 ]
 
 [dependencies]
