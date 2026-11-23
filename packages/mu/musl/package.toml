@@ -1,0 +1,8 @@
+name = "musl"
+license = "MIT"
+
+[upstream]
+homepage = "https://musl.libc.org/"
+sources = [
+  "https://musl.libc.org/releases/",
+]

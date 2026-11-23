@@ -1,0 +1,51 @@
+diff -Nru a/src/complex/__mulc3.c b/src/complex/__mulc3.c
+--- /dev/null
++++ b/src/complex/__mulc3.c
+@@ -0,0 +1,47 @@
++#include <math.h>
++
++/*
++ * Complex multiplication helpers that compilers call for `a * b` on complex
++ * operands (C11 Annex G.5.1). They normally come from the compiler's runtime
++ * library; defining them here lets libc.so link without one.
++ */
++
++#define MULC3(name, type, copysign_fn) \
++type _Complex name(type a, type b, type c, type d) \
++{ \
++	type ac = a * c, bd = b * d, ad = a * d, bc = b * c; \
++	type x = ac - bd, y = ad + bc; \
++	if (isnan(x) && isnan(y)) { \
++		int recalc = 0; \
++		if (isinf(a) || isinf(b)) { \
++			a = copysign_fn(isinf(a) ? 1 : 0, a); \
++			b = copysign_fn(isinf(b) ? 1 : 0, b); \
++			if (isnan(c)) c = copysign_fn(0, c); \
++			if (isnan(d)) d = copysign_fn(0, d); \
++			recalc = 1; \
++		} \
++		if (isinf(c) || isinf(d)) { \
++			c = copysign_fn(isinf(c) ? 1 : 0, c); \
++			d = copysign_fn(isinf(d) ? 1 : 0, d); \
++			if (isnan(a)) a = copysign_fn(0, a); \
++			if (isnan(b)) b = copysign_fn(0, b); \
++			recalc = 1; \
++		} \
++		if (!recalc && (isinf(ac) || isinf(bd) || isinf(ad) || isinf(bc))) { \
++			if (isnan(a)) a = copysign_fn(0, a); \
++			if (isnan(b)) b = copysign_fn(0, b); \
++			if (isnan(c)) c = copysign_fn(0, c); \
++			if (isnan(d)) d = copysign_fn(0, d); \
++			recalc = 1; \
++		} \
++		if (recalc) { \
++			x = INFINITY * (a * c - b * d); \
++			y = INFINITY * (a * d + b * c); \
++		} \
++	} \
++	return __builtin_complex(x, y); \
++}
++
++MULC3(__mulsc3, float, copysignf)
++MULC3(__muldc3, double, copysign)
++MULC3(__mulxc3, long double, copysignl)

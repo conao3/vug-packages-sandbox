@@ -1,0 +1,27 @@
+version = "2.46"
+
+[source]
+url = "https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.bz2"
+sha256 = "b8c9a3d796dc0b0e8ea935dc24c5c8d6f345eb177ada5ac6a5b1122c77d62158"
+
+[build]
+kind = "autotools"
+configure-flags = [
+  "--disable-nls",
+  "--disable-werror",
+  "--disable-gprofng",
+  "--disable-ld",
+  "--disable-shared",
+  "--enable-deterministic-archives",
+  "--without-zstd",
+]
+
+[dependencies]
+build = [
+  "make",
+]
+run = []
+
+[check]
+enabled = false
+skip = []

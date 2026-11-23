@@ -1,0 +1,13 @@
+--- a/src/stdio/__stdio_write.c
++++ b/src/stdio/__stdio_write.c
+@@ -11,6 +11,10 @@
+ 	size_t rem = iov[0].iov_len + iov[1].iov_len;
+ 	int iovcnt = 2;
+ 	ssize_t cnt;
++	if (!iov[0].iov_len) {
++		iov++;
++		iovcnt--;
++	}
+ 	for (;;) {
+ 		cnt = syscall(SYS_writev, f->fd, iov, iovcnt);
+ 		if (cnt == rem) {
