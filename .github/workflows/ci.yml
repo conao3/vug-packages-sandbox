@@ -14,3 +14,5 @@ jobs:
           persist-credentials: false
       - uses: cachix/install-nix-action@v32.0.0
       - run: nix develop --command make check
+
+# Sandbox acceptance fixture
