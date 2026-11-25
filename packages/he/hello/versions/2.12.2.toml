@@ -9,6 +9,7 @@ kind = "autotools"
 configure-flags = [
   "--disable-nls",
   "--disable-rpath",
+  "--disable-dependency-tracking",
 ]
 
 [dependencies]
